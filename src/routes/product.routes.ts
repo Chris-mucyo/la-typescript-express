@@ -7,15 +7,17 @@ import {
   deleteProduct,
 } from "../controllers/product.controller";
 import { protect, adminOnly } from "../middlewares/auth.middleware";
+import parser from "../config/multer"; // ← import multer/cloudinary
 
-const productrouter = express.Router();
+const router = express.Router();
 
-productrouter.get("/", getProducts);
-productrouter.get("/:id", getProduct);
+router.get("/", getProducts);
+router.get("/:id", getProduct);
 
 // Protected routes for admin
-productrouter.post("/", protect, adminOnly, createProduct);
-productrouter.put("/:id", protect, adminOnly, updateProduct);
-productrouter.delete("/:id", protect, adminOnly, deleteProduct);
+// parser.array('images') expects the form field name to be 'images'
+router.post("/", protect, adminOnly, parser.array("images", 5), createProduct);
+router.put("/:id", protect, adminOnly, parser.array("images", 5), updateProduct);
+router.delete("/:id", protect, adminOnly, deleteProduct);
 
-export default productrouter;
+export default router;

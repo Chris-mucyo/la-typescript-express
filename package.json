@@ -8,16 +8,26 @@
     "build": "tsc",
     "start": "node dist/index.js"
   },
-  "keywords": ["express", "typescript", "ecommerce", "backend", "api"],
+  "keywords": [
+    "express",
+    "typescript",
+    "ecommerce",
+    "backend",
+    "api"
+  ],
   "author": "Your Name",
   "license": "ISC",
   "dependencies": {
+    "@types/multer": "^2.0.0",
     "bcrypt": "^6.0.0",
+    "cloudinary": "^1.41.3",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.19.1"
+    "mongoose": "^8.19.1",
+    "multer": "^2.0.2",
+    "multer-storage-cloudinary": "^4.0.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
