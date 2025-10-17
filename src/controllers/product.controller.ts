@@ -5,17 +5,20 @@ import { AuthRequest } from "../middlewares/auth.middleware";
 
 // Extend Request type to include files from Multer
 interface MulterRequest extends Request {
-  files?: Express.Multer.File[];
+    files?: Express.Multer.File[] | { [fieldname: string]: Express.Multer.File[] };
 }
 
-export const createProduct = async (req: MulterRequest, res: Response) => {
+
+export const createProduct = async (req: Request, res: Response): Promise<void> => {
   try {
     const { name, description, price, stock, category } = req.body;
 
-    // Handle uploaded images
+    // ✅ Safely cast req.files
+    const files = req.files as Express.Multer.File[] | undefined;
     let images: string[] = [];
-    if (req.files && Array.isArray(req.files)) {
-      images = req.files.map(file => file.path); // Multer + Cloudinary sets path
+
+    if (files && Array.isArray(files)) {
+      images = files.map((file) => file.path);
     }
 
     const product = await Product.create({
@@ -33,7 +36,6 @@ export const createProduct = async (req: MulterRequest, res: Response) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-
 
 export const getProduct = async (req: Request, res: Response) => {
     try{

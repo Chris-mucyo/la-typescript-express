@@ -5,7 +5,7 @@ import cloudinary from "./cloudinary";
 const storage = new CloudinaryStorage({
     cloudinary,
     params: {
-        folder: "products",
+        folder: "uploads",
         allowed_formats: ["jpg", "jpeg", "png"],
         transformation: [{ width: 800, height: 800, crop: "limit" }],
     } as any,
