@@ -1,31 +1,36 @@
 import mongoose, { Schema, Document } from "mongoose";
-import { IUser } from "./user.model";
-import { IProduct } from "./product.model";
 
 export interface IOrder extends Document {
-  user: IUser["_id"];
-  products: { product: IProduct["_id"]; quantity: number }[];
-  total: number;
-  status: "pending" | "shipped" | "delivered";
+  user: mongoose.Schema.Types.ObjectId;
+  products: {
+    product: mongoose.Schema.Types.ObjectId;
+    quantity: number;
+  }[];
+  totalAmount: number;
+  paymentStatus: "pending" | "paid" | "failed";
+  paymentIntentId?: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-const orderSchema = new Schema<IOrder>(
+const OrderSchema = new Schema<IOrder>(
   {
     user: { type: Schema.Types.ObjectId, ref: "User", required: true },
     products: [
       {
-        product: { type: Schema.Types.ObjectId, ref: "Product" },
-        quantity: { type: Number, required: true },
+        product: { type: Schema.Types.ObjectId, ref: "Product", required: true },
+        quantity: { type: Number, required: true, default: 1 },
       },
     ],
-    total: { type: Number, required: true },
-    status: {
+    totalAmount: { type: Number, required: true },
+    paymentStatus: {
       type: String,
-      enum: ["pending", "shipped", "delivered"],
+      enum: ["pending", "paid", "failed"],
       default: "pending",
     },
+    paymentIntentId: { type: String },
   },
   { timestamps: true }
 );
 
-export default mongoose.model<IOrder>("Order", orderSchema);
+export default mongoose.model<IOrder>("Order", OrderSchema);
